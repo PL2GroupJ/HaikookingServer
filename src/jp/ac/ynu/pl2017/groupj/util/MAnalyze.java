@@ -8,7 +8,7 @@ import org.chasen.mecab.*;
  */
 public class MAnalyze {
 
-    String[] haiku;
+    //String[] haiku;
     static {
         try {
             String dir = System.getProperty("user.dir");
@@ -25,31 +25,36 @@ public class MAnalyze {
         Tagger tagger = new Tagger();
         String[] nameList = new String[10];
 
-        for(i = 0;i < h.length;i++) {
-            /*名詞の抽出*/
-            Node nodeSplit = tagger.parseToNode(h[i]);
-            for (; nodeSplit != null; nodeSplit = nodeSplit.getNext()) {
-                String sf = nodeSplit.getSurface();
-                String ft = nodeSplit.getFeature();
+        Node[] nodeSplit = new Node[4];
+        for (i = 0;i < h.length;i++) {
+            nodeSplit[i] = tagger.parseToNode(h[i]);
+            for (; nodeSplit[i] != null; nodeSplit[i] = nodeSplit[i].getNext()) {
+                String sf = nodeSplit[i].getSurface();
+                String ft = nodeSplit[i].getFeature();
                 StringTokenizer sta = new StringTokenizer(ft, ",");
+                //トークンの出力
                 while (sta.hasMoreTokens()) {
-                    if (sta.nextToken().equals("名詞") && j < 10) {
-                        System.out.println(sf + "を格納します");
+                    if (sta.nextToken().equals("名詞")) {
+                        System.out.println(sf + "\t" + ft);
                         nameList[j++] = sf;
                     }
                 }
 
             }
         }
+
         return nameList;
     }
-/*使い方*/
+
+    /*使い方*/
     public static void main(String args[]){
-        String[] haiku = {"古池や", "蛙飛び込む", "水の音"};
+        String[] haiku = {"", "古池や", "蛙飛び込む", "水の音"};
+        String[] nList;
         int i=0;
 
-        do{
-            System.out.println(mAnalyze(haiku)[i++]);
-        }while (i<4);
+        nList = mAnalyze(haiku);
+        while (nList[i] != null){
+            System.out.println(nList[i++]);
+        }
     }
 }
