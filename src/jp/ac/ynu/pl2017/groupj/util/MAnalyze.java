@@ -20,10 +20,10 @@ public class MAnalyze {
         }
     }
 
-    public static String[] mAnalyze(String[] h){
+    public static String mAnalyze(String[] h){
         int i, j = 0;
         Tagger tagger = new Tagger();
-        String[] nameList = new String[10];
+        String nameList = new String();
 
         Node[] nodeSplit = new Node[4];
         for (i = 0;i < h.length;i++) {
@@ -36,7 +36,7 @@ public class MAnalyze {
                 while (sta.hasMoreTokens()) {
                     if (sta.nextToken().equals("名詞")) {
                         System.out.println(sf + "\t" + ft);
-                        nameList[j++] = sf;
+                        nameList = nameList + sf + ",";
                     }
                 }
 
@@ -49,12 +49,10 @@ public class MAnalyze {
     /*使い方*/
     public static void main(String args[]){
         String[] haiku = {"", "古池や", "蛙飛び込む", "水の音"};
-        String[] nList;
+        String nList;
         int i=0;
 
         nList = mAnalyze(haiku);
-        while (nList[i] != null){
-            System.out.println(nList[i++]);
-        }
+        System.out.println(nList);
     }
 }
