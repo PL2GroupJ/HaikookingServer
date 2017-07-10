@@ -26,8 +26,8 @@ public class MAnalyze {
         int i;
         Tagger tagger = new Tagger();
         String nameList = "";
-        String speech = null;
         Node[] nodeSplit = new Node[4];
+        String sf2 = "-1";
 
         for (i = 0;i < h.length;i++) {
             if(h[i].contains("かな") || h[i].contains("けり")){
@@ -40,10 +40,10 @@ public class MAnalyze {
                 String sf = nodeSplit[i].getSurface();
                 String ft = nodeSplit[i].getFeature();
                 StringTokenizer sta = new StringTokenizer(ft, ",");
-                //トークンの出力
+
                 while (sta.hasMoreTokens()) {
-                    speech = sta.nextToken();
-                    if (speech.equals("名詞")) {
+                    if (sta.nextToken().equals("名詞")) {
+                        sf2 = sf;
                         System.out.println(sf + "\t" + ft);
                         nameList = nameList + sf + ",";
                     }
@@ -53,12 +53,10 @@ public class MAnalyze {
                     setFlags(kireji);
                 }
             }
-            /*
-            if (speech.equals("名詞")){
-                System.out.println("体言止め");
+            if (i > 0 && h[i].endsWith(sf2) ) {
                 setFlags(taigen);
+                System.out.println("体言止め");
             }
-            */
         }
         nameList = nameList.substring(0, nameList.length()-1);
         return nameList;
