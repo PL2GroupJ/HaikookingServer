@@ -10,6 +10,7 @@ import java.net.Socket
 class Server(val socket: Socket?): Thread() {
     private val input : DataInputStream?
     private val output : DataOutputStream?
+    private val separator = ":*:"
 
     init {
         socket!!
@@ -33,24 +34,37 @@ class Server(val socket: Socket?): Thread() {
         socket?.close()
     }
 
+    /**
+     * 俳句を受信する。
+     */
     private fun readHaiku() {
         println(input!!.readUTF())
     }
 
+    /**
+     * アドバイスを送信する。
+     */
     private fun writeAdvice() {
         output!!.writeUTF("this is advice")
     }
 
+    /**
+     * 名詞のリストを送信する。名詞はseparatorで区切って送信する。
+     */
     private fun writeNounList() {
-        output!!.writeUTF("this/*/is/*/noun/*/list")
+        output!!.writeUTF("this${separator}is${separator}noun${separator}list")
     }
 
+    /**
+     * 画像を送信する。WordCloudの画像送信に利用。
+     */
     private fun writeImage() {
         val a = File("res/1.png").inputStream().readBytes() // 適当にサンプルの送信
         output!!.writeInt(a.size)
         socket!!.getOutputStream().write(a)
     }
 
+    // 処理分岐のコマンド受信
     private fun acceptCommand() = ConnectionCommand.valueOf(input!!.readUTF())
 }
 
