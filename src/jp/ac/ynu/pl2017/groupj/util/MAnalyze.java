@@ -7,8 +7,10 @@ import org.chasen.mecab.*;
  * Created by haradakyouhei on 2017/06/29.
  */
 public class MAnalyze {
+    int kigo = 0, nonKigo = 1, jiAmari = 2, jiTarazu = 3, taigen = 4, kireji = 5;
+    boolean[] skillFlags = {false, false, false, false, false, false};
+    /*kigo, nonKigo, jiAmari, jiTarazu, taigen, kireJi*/
 
-    //String[] haiku;
     static {
         try {
             String dir = System.getProperty("user.dir");
@@ -20,13 +22,19 @@ public class MAnalyze {
         }
     }
 
-    public static String mAnalyze(String[] h){
-        int i, j = 0;
+    public  String mAnalyze(String[] h){
+        int i;
         Tagger tagger = new Tagger();
-        String nameList = new String();
-
+        String nameList = "";
+        String speech = null;
         Node[] nodeSplit = new Node[4];
+
         for (i = 0;i < h.length;i++) {
+            if(h[i].contains("かな") || h[i].contains("けり")){
+                System.out.println("切れ字");
+                setFlags(kireji);
+            }
+
             nodeSplit[i] = tagger.parseToNode(h[i]);
             for (; nodeSplit[i] != null; nodeSplit[i] = nodeSplit[i].getNext()) {
                 String sf = nodeSplit[i].getSurface();
@@ -34,25 +42,34 @@ public class MAnalyze {
                 StringTokenizer sta = new StringTokenizer(ft, ",");
                 //トークンの出力
                 while (sta.hasMoreTokens()) {
-                    if (sta.nextToken().equals("名詞")) {
+                    speech = sta.nextToken();
+                    if (speech.equals("名詞")) {
                         System.out.println(sf + "\t" + ft);
                         nameList = nameList + sf + ",";
                     }
                 }
-
+                if (i == 1 && sf.equals("や")){
+                    System.out.println(sf +"...切れ字");
+                    setFlags(kireji);
+                }
             }
+            /*
+            if (speech.equals("名詞")){
+                System.out.println("体言止め");
+                setFlags(taigen);
+            }
+            */
         }
-
+        nameList = nameList.substring(0, nameList.length()-1);
         return nameList;
     }
 
-    /*使い方*/
-    public static void main(String args[]){
-        String[] haiku = {"", "古池や", "蛙飛び込む", "水の音"};
-        String nList;
-        int i=0;
-
-        nList = mAnalyze(haiku);
-        System.out.println(nList);
+    void setFlags(int para){
+        skillFlags[para] = true;
     }
+
+    public boolean[] getSkillFlags(){
+            return skillFlags;
+    }
+
 }
