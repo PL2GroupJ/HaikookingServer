@@ -5,11 +5,11 @@ package jp.ac.ynu.pl2017.groupj.util;
  */
 public class MATest {
     public static void main(String args[]){
-        int kigo = 0, nonKigo = 1, jiAmari = 2, jiTarazu = 3, taigen = 4, kireji = 5;
+        int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
 
 
         MAnalyze ma = new MAnalyze();
-        String[] haiku = {"", "アマガエル", "芭蕉に乗りて", "そよぎけり"};
+        String[] haiku = {"", "赤い椿", "白い椿と", "落ちにけり"};
         boolean[] flags;
         String nList;
 
@@ -21,5 +21,9 @@ public class MATest {
             System.out.println("切れ字");
         if (flags[taigen])
             System.out.println("体言止め");
+        if (flags[jiAmari])
+            System.out.println("字余り");
+        if (flags[jiTarazu])
+            System.out.println("字足らず");
     }
 }
