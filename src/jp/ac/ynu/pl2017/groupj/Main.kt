@@ -59,7 +59,7 @@ class Server(val socket: Socket?): Thread() {
      * 画像を送信する。WordCloudの画像送信に利用。
      */
     private fun writeImage() {
-        val a = File("res/1.png").inputStream().readBytes() // 適当にサンプルの送信
+        val a = javaClass.classLoader.getResourceAsStream("1.png").readBytes() // 適当にサンプルの送信
         output!!.writeInt(a.size)
         socket!!.getOutputStream().write(a)
     }
