@@ -2,19 +2,27 @@ package jp.ac.ynu.pl2017.groupj.util;
 
 import java.io.*;
 import java.util.*;
+import java.net.*;
 import org.chasen.mecab.*;
 /**
  * Created by haradakyouhei on 2017/06/29.
  */
 public class MAnalyze {
     int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
+    // 字余り、字足らず、体言止め、切れ字のフラグ列
     boolean[] skillFlags = {false, false, false, false};
-    /*kigo, nonKigo, jiAmari, jiTarazu, taigen, kireJi*/
 
-    static {
+
+    //libMeCab.soの読み込み
+    {
         try {
+            URL url = MAnalyze.class.getResource("res/libMeCab.so");
+            if (url == null) System.out.println("検索失敗");
+            String libPath = url.toString();
+            System.out.println(libPath);
             String dir = System.getProperty("user.dir");
-            File f = new File(dir + "/res/libMeCab.so"); // Select libMeCab.so path
+            //File f = new File(dir + "/res/libMeCab.so"); // Select libMeCab.so path
+            File f = new File(libPath); // Select libMeCab.so path
             System.load(f.toString());
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Cannot load the example native code.\nMake sure your LD_LIBRARY_PATH contains \'.\'\n" + e);
@@ -45,14 +53,17 @@ public class MAnalyze {
                     if (sta.nextToken().equals("名詞")) {
                         sf2 = sf;
                         System.out.println(sf + "\t" + ft);
+                        //区切り文字":*:"
                         nameList = nameList + sf + ":*:";
                     }
                 }
+                //切れ字の判定
                 if (i == 1 && sf.equals("や")){
                     System.out.println(sf +"...切れ字");
                     setFlags(kireji);
                 }
             }
+            //体言止めの判定
             if (i > 0 && h[i].endsWith(sf2) ) {
                 setFlags(taigen);
                 System.out.println("体言止め");
@@ -60,6 +71,7 @@ public class MAnalyze {
         }
         nameList = nameList.substring(0, nameList.length()-3);
         soundAnalyze(h);
+        //名詞を区切り文字付きで返す
         return nameList;
     }
 

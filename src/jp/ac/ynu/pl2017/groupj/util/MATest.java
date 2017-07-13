@@ -5,17 +5,20 @@ package jp.ac.ynu.pl2017.groupj.util;
  */
 public class MATest {
     public static void main(String args[]){
+        //技法フラグのインデックス
         int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
 
-
         MAnalyze ma = new MAnalyze();
+        //戦闘要素の解析がなぜかう上手くいかないため、[1]から俳句
         String[] haiku = {"", "赤い椿", "白い椿と", "落ちにけり"};
         boolean[] flags;
         String nList;
 
+        //解析後の名詞の取得
         nList = ma.mAnalyze(haiku);
         System.out.println(nList);
 
+        //技法フラグの取得
         flags = ma.getSkillFlags();
         if(flags[kireji])
             System.out.println("切れ字");
