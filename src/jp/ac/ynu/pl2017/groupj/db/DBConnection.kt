@@ -19,6 +19,8 @@ object DBConnection {
 
         // まだこのThreadに存在しなければ、新しくConnectionをオープンする
         if (con == null) {
+            // static initializerでDriverの登録をさせるためにロードが必要
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver")
             con = DriverManager.getConnection(url)
             session.set(con)
         }

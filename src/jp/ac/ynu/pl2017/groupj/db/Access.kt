@@ -1,5 +1,6 @@
 package jp.ac.ynu.pl2017.groupj.db
 
+import jp.ac.ynu.pl2017.groupj.util.Season
 import jp.ac.ynu.pl2017.groupj.util.use
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -29,6 +30,30 @@ class Access {
             }
         }
         return id
+    }
+
+    /**
+     * 季語の季節を調べる。
+     * @param word 判別対象の語
+     * @return [Season]。存在しないなら[Season.DEFAULT]
+     */
+    fun loadSeason(word: String): Season {
+        val id = loadSeasonId(word)
+        val sql = "SELECT season FROM season WHERE id = $id"
+        var season = Season.DEFAULT
+        DBConnection.getConnection().createStatement().use { statement ->
+            statement.executeQuery(sql).use { result ->
+                if (result.next()) season = when(result.getInt("season")) {
+                    0 -> Season.SPRING
+                    1 -> Season.SUMMER
+                    2 -> Season.AUTUMN
+                    3 -> Season.WINTER
+                    4 -> Season.NEW_YEAR
+                    else -> Season.DEFAULT
+                }
+            }
+        }
+        return season
     }
 
     /**
