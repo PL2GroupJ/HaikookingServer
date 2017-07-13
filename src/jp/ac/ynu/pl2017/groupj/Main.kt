@@ -1,9 +1,9 @@
 package jp.ac.ynu.pl2017.groupj
 
 import jp.ac.ynu.pl2017.groupj.util.ConnectionCommand
+import jp.ac.ynu.pl2017.groupj.util.Season
 import java.io.DataInputStream
 import java.io.DataOutputStream
-import java.io.File
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -22,6 +22,7 @@ class Server(val socket: Socket?): Thread() {
         loop@ while (true) {
             when (acceptCommand()) {
                 ConnectionCommand.HAIKU ->      readHaiku()
+                ConnectionCommand.SEASON ->     writeSeason()
                 ConnectionCommand.ADVICE ->     writeAdvice()
                 ConnectionCommand.NOUN ->       writeNounList()
                 ConnectionCommand.IMAGE ->      writeImage()
@@ -39,6 +40,16 @@ class Server(val socket: Socket?): Thread() {
      */
     private fun readHaiku() {
         println(input!!.readUTF())
+    }
+
+    /**
+     * 季語を送信する。
+     */
+    fun writeSeason() {
+        // とりあえず新年を送信
+        output!!.writeUTF(Season.NEW_YEAR.name)
+        println(Season.NEW_YEAR)
+        println(Season.NEW_YEAR.name)
     }
 
     /**
