@@ -25,7 +25,7 @@ class Server(val socket: Socket?): Thread() {
                 ConnectionCommand.SEASON ->     writeSeason()
                 ConnectionCommand.ADVICE ->     writeAdvice()
                 ConnectionCommand.NOUN ->       writeNounList()
-                ConnectionCommand.IMAGE ->      writeImage()
+                ConnectionCommand.IMAGE ->      writeImages()
                 ConnectionCommand.DISCONNECT -> break@loop
             }
         }
@@ -67,12 +67,17 @@ class Server(val socket: Socket?): Thread() {
     }
 
     /**
-     * 画像を送信する。WordCloudの画像送信に利用。
+     * 複数の画像を送信する。WordCloudの画像送信に利用。
      */
-    private fun writeImage() {
-        val a = javaClass.classLoader.getResourceAsStream("1.png").readBytes() // 適当にサンプルの送信
-        output!!.writeInt(a.size)
-        socket!!.getOutputStream().write(a)
+    private fun writeImages() {
+        val resources = arrayOf("image/total.png", "image/week.png", "image/month.png", "image/spring.png",
+                "image/summer.png", "image/autumn.png", "image/winter.png", "image/new_year.png")
+        val outputStream = socket!!.getOutputStream()
+        resources.forEach {
+            val bytes = javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() }
+            output!!.writeInt(bytes.size)
+            outputStream.write(bytes)
+        }
     }
 
     // 処理分岐のコマンド受信
