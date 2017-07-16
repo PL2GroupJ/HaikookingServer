@@ -12,7 +12,7 @@ import java.nio.charset.Charset;
  */
 public class MAnalyze2 {
     public static void main(String[] args) {
-        StandardTagger tagger = new StandardTagger("", Charset.defaultCharset());
+        StandardTagger tagger = new StandardTagger("");
         System.out.println("MeCab version " + tagger.version());
 
         // Lattice（形態素解析に必要な実行時情報が格納されるオブジェクト）を構築
@@ -29,13 +29,13 @@ public class MAnalyze2 {
         System.out.println(lattice.toString());
 
         // 一つずつ形態素をたどりながら、表層形と素性を出力
-//        Node node = lattice.bosNode();
-//        while (node != null) {
-//            String surface = node.surface();
-//            String feature = node.feature();
-//            System.out.println(surface + "\t" + feature);
-//            node = node.next();
-//        }
+        Node node = lattice.bosNode();
+        while (node != null) {
+            String surface = node.surface();
+            String feature = node.feature();
+            System.out.println(surface + "\t" + feature);
+            node = node.next();
+        }
 
         // lattice, taggerを破壊
         lattice.destroy();
