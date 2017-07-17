@@ -14,15 +14,20 @@ public class MAnalyze {
 
 
     //libMeCab.soの読み込み
-    {
+    MAnalyze(String libPath){
         try {
-            URL url = MAnalyze.class.getResource("res/libMeCab.so");
-            if (url == null) System.out.println("検索失敗");
-            String libPath = url.toString();
-            System.out.println(libPath);
+            //URL url = MAnalyze.class.getResource("res/libMeCab.so");
+            //URL url = getClass().getResource("res/libMeCab.so");
+            //URL url = getClass().getClassLoader().getResource("res/libMeCab.so");
+            //URL url = getClass().getClassLoader().getSystemClassLoader().getResource("res/libMeCab.so");
+            //URL url = this.getClass().getResource("res/libMeCab.so");
+            //URL url = MAnalyze.class.getClassLoader().getResource("libMeCab.so");
+            //if (url == null) System.out.println("検索失敗");
+            //String libPath = url.toString();
+            //System.out.println(libPath);
             String dir = System.getProperty("user.dir");
-            //File f = new File(dir + "/res/libMeCab.so"); // Select libMeCab.so path
-            File f = new File(libPath); // Select libMeCab.so path
+            File f = new File(dir + "/res/libMeCab.dylib"); // Select libMeCab.so path
+            //File f = new File(libPath); // Select libMeCab.so path
             System.load(f.toString());
         } catch (UnsatisfiedLinkError e) {
             System.err.println("Cannot load the example native code.\nMake sure your LD_LIBRARY_PATH contains \'.\'\n" + e);
@@ -86,7 +91,7 @@ public class MAnalyze {
             node[i] = tagger.parseToNode(h[i]);
             for (; node[i] != null; node[i] = node[i].getNext()) {
                 if (i > 0) {
-                    //String sf = node[i].getSurface();
+                    //音数にならない文字を削除
                     kana = node[i].getFeature().split(",")[8];
                     kana = kana.replace("ゃ", "");
                     kana = kana.replace("ゅ", "");

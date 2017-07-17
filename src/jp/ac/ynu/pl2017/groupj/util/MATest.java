@@ -1,5 +1,6 @@
 package jp.ac.ynu.pl2017.groupj.util;
 
+
 /**
  * Created by haradakyouhei on 2017/07/10.
  */
@@ -8,9 +9,8 @@ public class MATest {
         //技法フラグのインデックス
         int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
 
-        MAnalyze ma = new MAnalyze();
-        //戦闘要素の解析がなぜかう上手くいかないため、[1]から俳句
-        String[] haiku = {"", "赤い椿", "白い椿と", "落ちにけり"};
+        MAnalyze2 ma = new MAnalyze2();
+        String[] haiku = {"赤い椿", "白い椿と", "落ちにけり"};
         boolean[] flags;
         String nList;
 
@@ -20,7 +20,7 @@ public class MATest {
 
         //技法フラグの取得
         flags = ma.getSkillFlags();
-        if(flags[kireji])
+        if (flags[kireji])
             System.out.println("切れ字");
         if (flags[taigen])
             System.out.println("体言止め");
