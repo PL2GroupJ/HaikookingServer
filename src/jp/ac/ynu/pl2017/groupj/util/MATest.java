@@ -9,7 +9,7 @@ public class MATest {
         //技法フラグのインデックス
         int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
 
-        MAnalyze2 ma = new MAnalyze2();
+        MAnalyze ma = new MAnalyze();
         String[] haiku = {"赤い椿", "白い椿と", "落ちにけり"};
         boolean[] flags;
         String nList;

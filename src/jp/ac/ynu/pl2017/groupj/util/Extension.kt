@@ -20,3 +20,14 @@ fun <T: AutoCloseable?, R> T.use(block: (T) -> R): R {
         }
     }
 }
+
+/**
+ * リストの要素を交換する。
+ * @param i1 一つ目の要素のインデックス
+ * @param i2 二つ目の要素のインデックス
+ */
+fun <T> MutableList<T>.swap(i1: Int, i2: Int) {
+    val tmp  = this[i1]
+    this[i1] = this[i2]
+    this[i2] = tmp
+}

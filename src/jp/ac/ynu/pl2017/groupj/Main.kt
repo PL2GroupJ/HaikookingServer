@@ -1,7 +1,10 @@
 package jp.ac.ynu.pl2017.groupj
 
+import jp.ac.ynu.pl2017.groupj.db.Access
 import jp.ac.ynu.pl2017.groupj.util.ConnectionCommand
+import jp.ac.ynu.pl2017.groupj.util.MAnalyze
 import jp.ac.ynu.pl2017.groupj.util.Season
+import jp.ac.ynu.pl2017.groupj.util.swap
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.ServerSocket
@@ -11,6 +14,8 @@ class Server(val socket: Socket?): Thread() {
     private val input : DataInputStream?
     private val output : DataOutputStream?
     private val separator = ":*:"
+    private lateinit var nounList: MutableList<String>
+    private lateinit var season: Season
 
     init {
         socket!!
@@ -39,32 +44,36 @@ class Server(val socket: Socket?): Thread() {
      * 俳句を受信する。
      */
     private fun readHaiku() {
-        println(input!!.readUTF())
+        val haiku = input!!.readUTF()
+        nounList = MAnalyze().mAnalyze(haiku.split(System.lineSeparator()).toTypedArray())
+                .split(separator).toMutableList()
+        val access = Access()
+        val seasonWord = nounList.firstOrNull { access.loadSeason(it) != Season.DEFAULT }
+        if (seasonWord == null)
+            season = Season.DEFAULT
+        else {
+            val index = nounList.indexOf(seasonWord)
+            nounList.swap(0, index)
+            season = access.loadSeason(seasonWord)
+            access.addUseCount(seasonWord, 1)
+        }
+        access.closeConnection()
     }
 
     /**
      * 季語を送信する。
      */
-    fun writeSeason() {
-        // とりあえず新年を送信
-        output!!.writeUTF(Season.NEW_YEAR.name)
-        println(Season.NEW_YEAR)
-        println(Season.NEW_YEAR.name)
-    }
+    fun writeSeason() = output!!.writeUTF(season.name)
 
     /**
      * アドバイスを送信する。
      */
-    private fun writeAdvice() {
-        output!!.writeUTF("this is advice")
-    }
+    private fun writeAdvice() = output!!.writeUTF("this is advice")
 
     /**
      * 名詞のリストを送信する。名詞はseparatorで区切って送信する。
      */
-    private fun writeNounList() {
-        output!!.writeUTF("this${separator}is${separator}noun${separator}list")
-    }
+    private fun writeNounList() = output!!.writeUTF(nounList.joinToString(separator = separator))
 
     /**
      * 複数の画像を送信する。WordCloudの画像送信に利用。
