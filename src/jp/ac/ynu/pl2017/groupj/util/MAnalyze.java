@@ -14,6 +14,18 @@ public class MAnalyze {
     int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
     // 字余り、字足らず、体言止め、切れ字のフラグ列
     boolean[] skillFlags = {false, false, false, false};
+    String[] advice = {
+            "字余り・字たらずは、言葉のとおり、定型の5・7・5の17字より多かったり、少なかったりすることです。" +
+                    "それにより得られる効果は、目立つことです。リズムを壊すことで、少し異端な印象を与えることができます。" +
+                    "それにより、感動をも際立たせるのです。参考(https://nanapi.com/ja/112697)",
+
+            "俳句の下五音を名詞や代名詞の体言で締め括ることを「体言止め」と言います。" +
+                    "体言が俳句の最後にあることで、それ以降の動詞や形容詞などの用言が省略されています。" +
+                    "そのため、省略された部分を想像することになり、情趣を生み出します。参考(https://nanapi.com/ja/112697)",
+
+            "切れ字というのは、強く言い切る働きをする語で、切れを生み出すのに使われます。" +
+                "現代の俳句では、「や」「かな」「けり」の三つの切れ字が使われています。" +
+                "いかに良い切れを作り出すかが、俳句作りの醍醐味で、これが作品の善し悪しを決めます。参考(https://jphaiku.jp/how/kire.html)"};
 
     public  String mAnalyze(String[] h){
         int i;
@@ -59,13 +71,13 @@ public class MAnalyze {
                 }
                 nodeSplit = nodeSplit.next();
             }
-            //体言止めの判定
-            if (h[i].endsWith(sf2) ) {
-                setFlags(taigen);
-                //System.out.println("体言止め");
-            }
-        }
 
+        }
+        //体言止めの判定
+        if (h[2].endsWith(sf2) && !(h[2].endsWith("かな"))) {
+            setFlags(taigen);
+            //System.out.println("体言止め");
+        }
         //音数の評価
         soundAnalyze(h);
         //区切り文字付きの名詞で返す
