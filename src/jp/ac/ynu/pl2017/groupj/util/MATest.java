@@ -10,7 +10,7 @@ public class MATest {
         int jiAmari = 0, jiTarazu = 1, taigen = 2, kireji = 3;
 
         MAnalyze ma = new MAnalyze();
-        String[] haiku = {"赤い椿", "白い椿と", "落ちにけり"};
+        String[] haiku = {"木枯に", "岩吹きとがる", "杉間かな"};
         boolean[] flags;
         String nList;
 

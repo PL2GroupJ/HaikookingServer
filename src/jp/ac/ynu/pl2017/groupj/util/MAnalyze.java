@@ -79,53 +79,57 @@ public class MAnalyze {
         Node node;
         Lattice lattice = tagger.createLattice();
 
-        for (i = 0;i < h.length;i++) {
-            String kana = "";
-            lattice.setSentence(h[i]);
-            tagger.parse(lattice);
-            node = lattice.bosNode();
-            while (node != null){
-                //音数にならない文字を削除
-                kana = node.feature().split(",")[8];
-                kana = kana.replace("ゃ", "");
-                kana = kana.replace("ゅ", "");
-                kana = kana.replace("ょ", "");
-                kana = kana.replace("ャ", "");
-                kana = kana.replace("ュ", "");
-                kana = kana.replace("ョ", "");
-                kana = kana.replace("ぁ", "");
-                kana = kana.replace("ぃ", "");
-                kana = kana.replace("ぅ", "");
-                kana = kana.replace("ぇ", "");
-                kana = kana.replace("ぉ", "");
-                kana = kana.replace("ァ", "");
-                kana = kana.replace("ィ", "");
-                kana = kana.replace("ゥ", "");
-                kana = kana.replace("ェ", "");
-                kana = kana.replace("ォ", "");
-                kana = kana.replace("ゎ", "");
-                kana = kana.replace("ヮ", "");
-                //System.out.println(kana);
+        try {
+            for (i = 0; i < h.length; i++) {
+                String kana = "";
+                lattice.setSentence(h[i]);
+                tagger.parse(lattice);
+                node = lattice.bosNode();
+                while (node != null) {
+                    //音数にならない文字を削除
+                    kana = node.feature().split(",")[8];
+                    kana = kana.replace("ゃ", "");
+                    kana = kana.replace("ゅ", "");
+                    kana = kana.replace("ょ", "");
+                    kana = kana.replace("ャ", "");
+                    kana = kana.replace("ュ", "");
+                    kana = kana.replace("ョ", "");
+                    kana = kana.replace("ぁ", "");
+                    kana = kana.replace("ぃ", "");
+                    kana = kana.replace("ぅ", "");
+                    kana = kana.replace("ぇ", "");
+                    kana = kana.replace("ぉ", "");
+                    kana = kana.replace("ァ", "");
+                    kana = kana.replace("ィ", "");
+                    kana = kana.replace("ゥ", "");
+                    kana = kana.replace("ェ", "");
+                    kana = kana.replace("ォ", "");
+                    kana = kana.replace("ゎ", "");
+                    kana = kana.replace("ヮ", "");
+                    //System.out.println(kana);
 
-                kanaLeng = kanaLeng + kana;
-                kanaLeng = kanaLeng.replace("*","");
-                node = node.next();
-            }
-            System.out.println(kanaLeng + "\t" + kanaLeng.length());
-            if ((i == 0 || i == 2 ) && kanaLeng.length() != 5){
-                if (kanaLeng.length() < 5){
-                    setFlags(jiTarazu);
-                }else {
-                    setFlags(jiAmari);
+                    kanaLeng = kanaLeng + kana;
+                    kanaLeng = kanaLeng.replace("*", "");
+                    node = node.next();
                 }
-            }else if ((i == 1) && kanaLeng.length() != 7){
-                if (kanaLeng.length() < 7){
-                    setFlags(jiTarazu);
-                }else {
-                    setFlags(jiAmari);
+                System.out.println(kanaLeng + "\t" + kanaLeng.length());
+                if ((i == 0 || i == 2) && kanaLeng.length() != 5) {
+                    if (kanaLeng.length() < 5) {
+                        setFlags(jiTarazu);
+                    } else {
+                        setFlags(jiAmari);
+                    }
+                } else if ((i == 1) && kanaLeng.length() != 7) {
+                    if (kanaLeng.length() < 7) {
+                        setFlags(jiTarazu);
+                    } else {
+                        setFlags(jiAmari);
+                    }
                 }
+                kanaLeng = "";
             }
-            kanaLeng = "";
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println("ふりがなの振られない文字がありました");
         }
 
     }
