@@ -5,14 +5,16 @@ import jp.ac.ynu.pl2017.groupj.util.ConnectionCommand
 import jp.ac.ynu.pl2017.groupj.util.MAnalyze
 import jp.ac.ynu.pl2017.groupj.util.Season
 import jp.ac.ynu.pl2017.groupj.util.swap
+import java.io.BufferedOutputStream
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.ServerSocket
 import java.net.Socket
 
 class Server(val socket: Socket?): Thread() {
-    private val input : DataInputStream?
-    private val output : DataOutputStream?
+    private val input: DataInputStream?
+    private val output: DataOutputStream?
+    private val outputB: BufferedOutputStream?
     private val separator = ":*:"
     private lateinit var nounList: MutableList<String>
     private lateinit var season: Season
@@ -21,6 +23,7 @@ class Server(val socket: Socket?): Thread() {
         socket!!
         input = DataInputStream(socket.getInputStream())
         output = DataOutputStream(socket.getOutputStream())
+        outputB = BufferedOutputStream(socket.getOutputStream())
     }
 
     override fun run() {
@@ -37,6 +40,7 @@ class Server(val socket: Socket?): Thread() {
 
         input?.close()
         output?.close()
+        outputB?.close()
         socket?.close()
     }
 
@@ -82,11 +86,13 @@ class Server(val socket: Socket?): Thread() {
         val resources = arrayOf("image/total_wordcloud.png", "image/weekly_wordcloud.png", "image/monthly_wordcloud.png",
                 "image/spring_wordcloud.png", "image/summer_wordcloud.png", "image/autumn_wordcloud.png", "image/winter_wordcloud.png",
                 "image/newyear_wordcloud.png")
-        val outputStream = socket!!.getOutputStream()
         resources.forEach {
+            println(it)
             val bytes = javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() }
             output!!.writeInt(bytes.size)
-            outputStream.write(bytes)
+            println(it)
+            println(bytes.size)
+            outputB!!.write(bytes)
         }
     }
 
