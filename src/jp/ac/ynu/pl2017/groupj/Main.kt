@@ -79,8 +79,9 @@ class Server(val socket: Socket?): Thread() {
      * 複数の画像を送信する。WordCloudの画像送信に利用。
      */
     private fun writeImages() {
-        val resources = arrayOf("image/total.png", "image/week.png", "image/month.png", "image/spring.png",
-                "image/summer.png", "image/autumn.png", "image/winter.png", "image/new_year.png")
+        val resources = arrayOf("image/total_wordcloud.png", "image/weekly_wordcloud.png", "image/monthly_wordcloud.png",
+                "image/spring_wordcloud.png", "image/summer_wordcloud.png", "image/autumn_wordcloud.png", "image/winter_wordcloud.png",
+                "image/newyear_wordcloud.png")
         val outputStream = socket!!.getOutputStream()
         resources.forEach {
             val bytes = javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() }
