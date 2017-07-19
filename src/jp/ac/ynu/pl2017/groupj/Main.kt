@@ -1,11 +1,7 @@
 package jp.ac.ynu.pl2017.groupj
 
 import jp.ac.ynu.pl2017.groupj.db.Access
-import jp.ac.ynu.pl2017.groupj.util.ConnectionCommand
-import jp.ac.ynu.pl2017.groupj.util.MAnalyze
-import jp.ac.ynu.pl2017.groupj.util.Season
-import jp.ac.ynu.pl2017.groupj.util.swap
-import java.io.BufferedOutputStream
+import jp.ac.ynu.pl2017.groupj.util.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.net.ServerSocket
@@ -14,7 +10,6 @@ import java.net.Socket
 class Server(val socket: Socket?): Thread() {
     private val input: DataInputStream?
     private val output: DataOutputStream?
-    private val outputB: BufferedOutputStream?
     private val separator = ":*:"
     private lateinit var nounList: MutableList<String>
     private lateinit var season: Season
@@ -23,7 +18,6 @@ class Server(val socket: Socket?): Thread() {
         socket!!
         input = DataInputStream(socket.getInputStream())
         output = DataOutputStream(socket.getOutputStream())
-        outputB = BufferedOutputStream(socket.getOutputStream())
     }
 
     override fun run() {
@@ -40,7 +34,6 @@ class Server(val socket: Socket?): Thread() {
 
         input?.close()
         output?.close()
-        outputB?.close()
         socket?.close()
     }
 
@@ -80,20 +73,16 @@ class Server(val socket: Socket?): Thread() {
     private fun writeNounList() = output!!.writeUTF(nounList.joinToString(separator = separator))
 
     /**
-     * 複数の画像を送信する。WordCloudの画像送信に利用。
+     * 複数の画像のバイト列を送信する。WordCloudの画像送信に利用。
      */
     private fun writeImages() {
         val resources = arrayOf("image/total_wordcloud.png", "image/weekly_wordcloud.png", "image/monthly_wordcloud.png",
                 "image/spring_wordcloud.png", "image/summer_wordcloud.png", "image/autumn_wordcloud.png", "image/winter_wordcloud.png",
                 "image/newyear_wordcloud.png")
-        resources.forEach {
-            println(it)
-            val bytes = javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() }
-            output!!.writeInt(bytes.size)
-            println(it)
-            println(bytes.size)
-            outputB!!.write(bytes)
-        }
+        val byteArrayList = resources.map { javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() } }
+        val data = byteArrayList.concat()                       // 結合してから一度に送信
+        byteArrayList.forEach { output!!.writeInt(it.size) }    // それぞれのバイト列のサイズをクライアントに通知
+        output!!.write(data)
     }
 
     // 処理分岐のコマンド受信
@@ -108,6 +97,7 @@ fun main(args: Array<String>) {
         while (true) {
             val socket = it.accept()
             Server(socket).start()
+            println("accept : $socket")
         }
     }
 }

@@ -31,3 +31,17 @@ fun <T> MutableList<T>.swap(i1: Int, i2: Int) {
     this[i1] = this[i2]
     this[i2] = tmp
 }
+
+/**
+ * [ByteArray]のリストを結合して、１つの[ByteArray]にする。
+ * @return 結合されたバイト列
+ */
+fun List<ByteArray>.concat(): ByteArray {
+    val retBytes = ByteArray(this.sumBy { it.size })
+    var pos = 0
+    this.forEach { bytes ->
+        System.arraycopy(bytes, 0, retBytes, pos, bytes.size)
+        pos += bytes.size
+    }
+    return retBytes
+}
