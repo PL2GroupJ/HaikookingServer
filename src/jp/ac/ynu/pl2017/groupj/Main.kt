@@ -13,6 +13,7 @@ class Server(val socket: Socket?): Thread() {
     private val separator = ":*:"
     private lateinit var nounList: MutableList<String>
     private lateinit var season: Season
+    private lateinit var advice: String
 
     init {
         socket!!
@@ -42,8 +43,20 @@ class Server(val socket: Socket?): Thread() {
      */
     private fun readHaiku() {
         val haiku = input!!.readUTF()
-        nounList = MAnalyze().mAnalyze(haiku.split(System.lineSeparator()).toTypedArray())
+        val analyze = MAnalyze()
+        nounList = analyze.mAnalyze(haiku.split(System.lineSeparator()).toTypedArray())
                 .split(separator).toMutableList()
+        val sb = StringBuilder()
+        if (analyze.skillFlags[0] || analyze.skillFlags[1])
+            sb.append(analyze.advice[0], System.lineSeparator())
+        analyze.skillFlags.drop(2).forEachIndexed { i, flag ->
+            if (flag)
+                sb.append(analyze.advice[i + 1], System.lineSeparator())
+        }
+        repeat(System.lineSeparator().length) {
+            sb.deleteCharAt(sb.length - 1)
+        }
+        advice = sb.toString()
         val access = Access()
         val seasonWord = nounList.firstOrNull { access.loadSeason(it) != Season.DEFAULT }
         if (seasonWord == null)
@@ -65,7 +78,7 @@ class Server(val socket: Socket?): Thread() {
     /**
      * アドバイスを送信する。
      */
-    private fun writeAdvice() = output!!.writeUTF("this is advice")
+    private fun writeAdvice() = output!!.writeUTF(advice)
 
     /**
      * 名詞のリストを送信する。名詞はseparatorで区切って送信する。
