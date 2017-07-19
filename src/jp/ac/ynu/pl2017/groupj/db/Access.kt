@@ -130,16 +130,30 @@ class Access {
             else -> error("flagの指定が間違っています")
         }
         val sql = "SELECT season_id, COUNT(*) as c FROM used WHERE time > ${dt.format(f).s()} GROUP BY season_id ORDER BY c DESC LIMIT 0, $count"
-        println(sql)
-        val list = mutableListOf<Pair<String, Int>>()
+        val list = mutableListOf<Pair<Int, Int>>()
         DBConnection.getConnection().createStatement().use { statement ->
             statement.executeQuery(sql).use { result ->
                 while (result.next()) {
-                    list.add(result.getString("season_id") to result.getInt("c"))
+                    list.add(result.getInt("season_id") to result.getInt("c"))
                 }
             }
         }
-        return list
+        val map = loadWordMap(list.map { it.first }.toIntArray())
+        return list.map { (id, count) -> map[id]!! to count }
+    }
+
+    private fun loadWordMap(ids: IntArray): Map<Int, String> {
+        val idString = ids.map { it.toString() }.joinToString(separator = ",")
+        val sql = "SELECT id, word FROM season WHERE id IN ($idString)"
+        val map = mutableMapOf<Int, String>()
+        DBConnection.getConnection().createStatement().use { statement ->
+            statement.executeQuery(sql).use { result ->
+                while (result.next()) {
+                    map.put(result.getInt("id"), result.getString("word"))
+                }
+            }
+        }
+        return map
     }
 
     // 文字列を''で囲った文字列に変換。java -> 'java'

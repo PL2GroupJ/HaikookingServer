@@ -4,6 +4,7 @@ import jp.ac.ynu.pl2017.groupj.db.Access
 import jp.ac.ynu.pl2017.groupj.util.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
+import java.io.File
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -105,12 +106,33 @@ class Server(val socket: Socket?): Thread() {
 fun main(args: Array<String>) {
     val port = 9999
     val serverSocket = ServerSocket(port)
-
+    dumpDB()
     serverSocket.use {
         while (true) {
             val socket = it.accept()
             Server(socket).start()
             println("accept : $socket")
         }
+    }
+}
+
+fun dumpDB() {
+    val access = Access()
+    Access.Flag.values().forEach {
+        val data = access.loadWordAndCounts(it, 30)
+        val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
+        val fileName = "python/text/" + when (it) {
+            Access.Flag.TOTAL -> "total_wordcloud.txt"
+            Access.Flag.MONTH -> "monthly_wordcloud.txt"
+            Access.Flag.WEEK -> "weekly_wordcloud.txt"
+            Access.Flag.SPRING -> "spring_wordcloud.txt"
+            Access.Flag.SUMMER -> "summer_wordcloud.txt"
+            Access.Flag.AUTUMN -> "autumn_wordcloud.txt"
+            Access.Flag.WINTER -> "winter_wordcloud.txt"
+            Access.Flag.NEW_YEAR -> "newyear_wordcloud.txt"
+        }
+        val file = File(fileName)
+        if (!file.exists()) file.createNewFile()
+        file.writeText(text)
     }
 }
