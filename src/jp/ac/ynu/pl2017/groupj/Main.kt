@@ -7,6 +7,9 @@ import java.io.DataOutputStream
 import java.io.File
 import java.net.ServerSocket
 import java.net.Socket
+import java.time.LocalDateTime
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class Server(val socket: Socket?): Thread() {
     private val input: DataInputStream?
@@ -106,7 +109,17 @@ class Server(val socket: Socket?): Thread() {
 fun main(args: Array<String>) {
     val port = 9999
     val serverSocket = ServerSocket(port)
-    dumpDB()
+
+    // ローカル関数で再帰をする。一日経つごとにに実行
+    fun task(dateTime: LocalDateTime = LocalDateTime.now().plusDays(1)) {
+        println("next dump is $dateTime")
+        dumpDB()
+        val timer = Timer()
+        timer.schedule(timerTask { task() }, dateTime.toDate() )
+    }
+    val now = LocalDateTime.now()
+    task(now.plusHours(26 - now.hour.toLong()))     // 次の日の午前2時~3時を指定
+
     serverSocket.use {
         while (true) {
             val socket = it.accept()

@@ -1,5 +1,10 @@
 package jp.ac.ynu.pl2017.groupj.util
 
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
+
 /**
  * KotlinのuseをAutoCloseableに対応させたもの。
  */
@@ -44,4 +49,14 @@ fun List<ByteArray>.concat(): ByteArray {
         pos += bytes.size
     }
     return retBytes
+}
+
+/**
+ * [LocalDateTime]を[Date]に変換する。
+ * @return 対応するDate
+ */
+fun LocalDateTime.toDate(): Date {
+    val zone = ZoneId.systemDefault()
+    val zonedDateTime = ZonedDateTime.of(this, zone)
+    return Date.from(zonedDateTime.toInstant())
 }
