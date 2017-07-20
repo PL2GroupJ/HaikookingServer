@@ -57,9 +57,8 @@ class Server(val socket: Socket?): Thread() {
             if (flag)
                 sb.append(analyze.advice[i + 1], System.lineSeparator())
         }
-        repeat(System.lineSeparator().length) {
-            sb.deleteCharAt(sb.length - 1)
-        }
+        if (sb.isNotEmpty())
+            repeat(System.lineSeparator().length) { sb.deleteCharAt(sb.length - 1) }
         advice = sb.toString()
         val access = Access()
         val seasonWord = nounList.firstOrNull { access.loadSeason(it) != Season.DEFAULT }

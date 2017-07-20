@@ -138,6 +138,10 @@ class Access {
                 }
             }
         }
+
+        // データが存在しない場合
+        if (list.isEmpty()) return listOf()
+
         val map = loadWordMap(list.map { it.first }.toIntArray())
         return list.map { (id, count) -> map[id]!! to count }
     }
