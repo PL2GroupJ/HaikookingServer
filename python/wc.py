@@ -66,46 +66,45 @@ autumn_text = autumn_f.read()
 winter_f = open("./python/text/winter_wordcloud.txt")
 winter_text = winter_f.read()
 
-while True:
-    today = datetime.date.today()
-    wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(total_text)
-    wordcloud.to_file("./image/total_wordcloud.png")
-    print("total_wordcloud was generated.")
+# today = datetime.date.today()
+wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(total_text)
+wordcloud.to_file("./image/total_wordcloud.png")
+print("total_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(weekly_text)
-    wordcloud.to_file("./image/weekly_wordcloud.png")
-    print("weekly_wordcloud was generated.")
+wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(weekly_text)
+wordcloud.to_file("./image/weekly_wordcloud.png")
+print("weekly_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(monthly_text)
-    wordcloud.to_file("./image/monthly_wordcloud.png")
-    print("monthly_wordcloud was generated.")
+wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(monthly_text)
+wordcloud.to_file("./image/monthly_wordcloud.png")
+print("monthly_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="moccasin", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=newyear_mask, width=600, height=600, colormap="Reds").generate(newyear_text)
-    wordcloud.to_file("./image/newyear_wordcloud.png")
-    print("newyear_wordcloud was generated.")
+wordcloud = WordCloud(background_color="moccasin", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=newyear_mask, width=600, height=600, colormap="Reds").generate(newyear_text)
+wordcloud.to_file("./image/newyear_wordcloud.png")
+print("newyear_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="palegreen", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=spring_mask, width=600, height=600, colormap="spring").generate(spring_text)
-    wordcloud.to_file("./image/spring_wordcloud.png")
-    print("spring_wordcloud was generated.")
+wordcloud = WordCloud(background_color="palegreen", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=spring_mask, width=600, height=600, colormap="spring").generate(spring_text)
+wordcloud.to_file("./image/spring_wordcloud.png")
+print("spring_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="paleturquoise", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=summer_mask, width=600, height=600, colormap="summer").generate(summer_text)
-    wordcloud.to_file("./image/summer_wordcloud.png")
-    print("summer_wordcloud was generated.")
+wordcloud = WordCloud(background_color="paleturquoise", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=summer_mask, width=600, height=600, colormap="summer").generate(summer_text)
+wordcloud.to_file("./image/summer_wordcloud.png")
+print("summer_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="darkslategray", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=autumn_mask, width=600, height=600, colormap="autumn").generate(autumn_text)
-    wordcloud.to_file("./image/autumn_wordcloud.png")
-    print("autumn_wordcloud was generated.")
+wordcloud = WordCloud(background_color="darkslategray", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=autumn_mask, width=600, height=600, colormap="autumn").generate(autumn_text)
+wordcloud.to_file("./image/autumn_wordcloud.png")
+print("autumn_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="midnightblue", font_path="./ヒラギノ角ゴシック W5.ttc",
-                          mask=winter_mask, width=600, height=600, colormap="PuBuGn").generate(winter_text)
-    wordcloud.to_file("./image/winter_wordcloud.png")
-    print("winter_wordcloud was generated.")
+wordcloud = WordCloud(background_color="midnightblue", font_path="./ヒラギノ角ゴシック W5.ttc",
+                      mask=winter_mask, width=600, height=600, colormap="PuBuGn").generate(winter_text)
+wordcloud.to_file("./image/winter_wordcloud.png")
+print("winter_wordcloud was generated.")
 
-    # time.sleep(86400)
+# time.sleep(86400)
