@@ -95,7 +95,7 @@ class Server(val socket: Socket?): Thread() {
         val resources = arrayOf("image/total_wordcloud.png", "image/weekly_wordcloud.png", "image/monthly_wordcloud.png",
                 "image/spring_wordcloud.png", "image/summer_wordcloud.png", "image/autumn_wordcloud.png", "image/winter_wordcloud.png",
                 "image/newyear_wordcloud.png")
-        val byteArrayList = resources.map { javaClass.classLoader.getResourceAsStream(it).use { it.readBytes() } }
+        val byteArrayList = resources.map { File(it).inputStream().use { it.readBytes() } }
         val data = byteArrayList.concat()                       // 結合してから一度に送信
         byteArrayList.forEach { output!!.writeInt(it.size) }    // それぞれのバイト列のサイズをクライアントに通知
         output!!.write(data)
