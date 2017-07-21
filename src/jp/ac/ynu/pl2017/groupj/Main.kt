@@ -119,7 +119,7 @@ fun main(args: Array<String>) {
     val now = LocalDateTime.now()
     task(now.plusHours(26 - now.hour.toLong()))     // 次の日の午前2時~3時を指定
 
-    println(runPython(args[0]))
+//    println(runPython(args[0]))
 
     serverSocket.use {
         while (true) {
