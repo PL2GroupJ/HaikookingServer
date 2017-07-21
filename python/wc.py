@@ -30,40 +30,40 @@ d = path.dirname(__file__)
 start_day = datetime.date.today()
 
 logo_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/logo_mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/logo_mask.png")))
 spring_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/spring-mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/spring-mask.png")))
 newyear_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/newyear-mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/newyear-mask.png")))
 summer_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/summer-mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/summer-mask.png")))
 autumn_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/autumn-mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/autumn-mask.png")))
 winter_mask = np.array(Image.open(
-    path.join(d, os.getcwd() + "/mask/winter-mask.png")))
+    path.join(d, os.getcwd() + "/python/mask/winter-mask.png")))
 
-total_f = open("./text/total_wordcloud.txt")
+total_f = open("./python/text/total_wordcloud.txt")
 total_text = total_f.read()
 
-weekly_f = open("./text/weekly_wordcloud.txt")
+weekly_f = open("./python/text/weekly_wordcloud.txt")
 weekly_text = weekly_f.read()
 
-monthly_f = open("./text/monthly_wordcloud.txt")
+monthly_f = open("./python/text/monthly_wordcloud.txt")
 monthly_text = monthly_f.read()
 
-newyear_f = open("./text/newyear_wordcloud.txt")
+newyear_f = open("./python/text/newyear_wordcloud.txt")
 newyear_text = newyear_f.read()
 
-spring_f = open("./text/spring_wordcloud.txt")
+spring_f = open("./python/text/spring_wordcloud.txt")
 spring_text = spring_f.read()
 
-summer_f = open("./text/summer_wordcloud.txt")
+summer_f = open("./python/text/summer_wordcloud.txt")
 summer_text = summer_f.read()
 
-autumn_f = open("./text/autumn_wordcloud.txt")
+autumn_f = open("./python/text/autumn_wordcloud.txt")
 autumn_text = autumn_f.read()
 
-winter_f = open("./text/winter_wordcloud.txt")
+winter_f = open("./python/text/winter_wordcloud.txt")
 winter_text = winter_f.read()
 
 while True:
