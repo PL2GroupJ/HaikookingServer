@@ -11,6 +11,8 @@ from wordcloud import WordCloud
 
 if __name__ == '__main__':
     logo_mask = np.array(Image.open("mask/logo_mask.png"))
+    weekly_mask = np.array(Image.open("mask/weekly-mask.png"))
+    monthly_mask = np.array(Image.open("mask/monthly-mask.png"))
     spring_mask = np.array(Image.open("mask/spring-mask.png"))
     newyear_mask = np.array(Image.open("mask/newyear-mask.png"))
     summer_mask = np.array(Image.open("mask/summer-mask.png"))
@@ -48,12 +50,12 @@ if __name__ == '__main__':
     print("total_wordcloud was generated.")
 
     wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="meiryo.ttc",
-                          mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(weekly_text)
+                          mask=weekly_mask, width=600, height=600, colormap="gist_rainbow").generate(weekly_text)
     wordcloud.to_file("../image/weekly_wordcloud.png")
     print("weekly_wordcloud was generated.")
 
-    wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="meiryo.ttc",
-                          mask=logo_mask, width=600, height=600, colormap="gist_rainbow").generate(monthly_text)
+    wordcloud = WordCloud(background_color="midnightblue", mode="RGB", font_path="meiryo.ttc",
+                          mask=monthly_mask, width=600, height=600, colormap="Wistia").generate(monthly_text)
     wordcloud.to_file("../image/monthly_wordcloud.png")
     print("monthly_wordcloud was generated.")
 
