@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/KotlinJavaRuntime"/>
-	<classpathentry kind="output" path="out/production/HaikookingServer"/>
+	<classpathentry kind="con" path="org.jetbrains.kotlin.core.KOTLIN_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/bridj-0.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/cmecab-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="lib/jackcess-2.1.6.jar"/>
+	<classpathentry kind="lib" path="lib/MeCab.jar"/>
+	<classpathentry kind="lib" path="lib/ucanaccess-4.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="res"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
