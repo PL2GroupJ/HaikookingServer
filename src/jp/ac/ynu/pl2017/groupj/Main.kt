@@ -119,6 +119,8 @@ fun main(args: Array<String>) {
     val now = LocalDateTime.now()
     task(now.plusHours(26 - now.hour.toLong()))     // 次の日の午前2時~3時を指定
 
+    println(runPython(args[0]))
+
     serverSocket.use {
         while (true) {
             val socket = it.accept()
@@ -131,7 +133,7 @@ fun main(args: Array<String>) {
 fun dumpDB() {
     val access = Access()
     Access.Flag.values().forEach {
-        val data = access.loadWordAndCounts(it, 30)
+        val data = access.loadWordAndCounts(it, 100)
         val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
         val fileName = "python/text/" + when (it) {
             Access.Flag.TOTAL -> "total_wordcloud.txt"
@@ -147,4 +149,11 @@ fun dumpDB() {
         if (!file.exists()) file.createNewFile()
         file.writeText(text)
     }
+    access.closeConnection()
+}
+
+fun runPython(pythonPath: String): Boolean {
+    println(pythonPath)
+    val process = ProcessBuilder(pythonPath, "python/wc.py").start()
+    return process.waitFor() == 0
 }
