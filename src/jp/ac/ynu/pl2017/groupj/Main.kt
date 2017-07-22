@@ -5,8 +5,10 @@ import jp.ac.ynu.pl2017.groupj.util.*
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File
+import java.io.OutputStreamWriter
 import java.net.ServerSocket
 import java.net.Socket
+import java.nio.charset.Charset
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -92,9 +94,9 @@ class Server(val socket: Socket?): Thread() {
      * 複数の画像のバイト列を送信する。WordCloudの画像送信に利用。
      */
     private fun writeImages() {
-        val resources = arrayOf("image/total_wordcloud.png", "image/weekly_wordcloud.png", "image/monthly_wordcloud.png",
-                "image/spring_wordcloud.png", "image/summer_wordcloud.png", "image/autumn_wordcloud.png", "image/winter_wordcloud.png",
-                "image/newyear_wordcloud.png")
+        val resources = arrayOf("python/image/total_wordcloud.png", "python/image/weekly_wordcloud.png", "python/image/monthly_wordcloud.png",
+                "python/image/spring_wordcloud.png", "python/image/summer_wordcloud.png", "python/image/autumn_wordcloud.png", "python/image/winter_wordcloud.png",
+                "python/image/newyear_wordcloud.png")
         val byteArrayList = resources.map { File(it).inputStream().use { it.readBytes() } }
         val data = byteArrayList.concat()                       // 結合してから一度に送信
         byteArrayList.forEach { output!!.writeInt(it.size) }    // それぞれのバイト列のサイズをクライアントに通知
@@ -109,17 +111,16 @@ fun main(args: Array<String>) {
     val port = 9999
     val serverSocket = ServerSocket(port)
 
+    println("start server")
+
     // ローカル関数で再帰をする。一日経つごとにに実行
     fun task(dateTime: LocalDateTime = LocalDateTime.now().plusDays(1)) {
-        println("next dump is $dateTime")
-        dumpDB()
-        val timer = Timer()
-        timer.schedule(timerTask { task() }, dateTime.toDate() )
+        runPython()
+        println("next generation is $dateTime")
+        Timer().schedule(timerTask { task() }, dateTime.toDate() )
     }
     val now = LocalDateTime.now()
     task(now.plusHours(26 - now.hour.toLong()))     // 次の日の午前2時~3時を指定
-
-//    println(runPython(args[0]))
 
     serverSocket.use {
         while (true) {
@@ -130,30 +131,27 @@ fun main(args: Array<String>) {
     }
 }
 
-fun dumpDB() {
-    val access = Access()
-    Access.Flag.values().forEach {
-        val data = access.loadWordAndCounts(it, 100)
-        val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
-        val fileName = "python/text/" + when (it) {
-            Access.Flag.TOTAL -> "total_wordcloud.txt"
-            Access.Flag.MONTH -> "monthly_wordcloud.txt"
-            Access.Flag.WEEK -> "weekly_wordcloud.txt"
-            Access.Flag.SPRING -> "spring_wordcloud.txt"
-            Access.Flag.SUMMER -> "summer_wordcloud.txt"
-            Access.Flag.AUTUMN -> "autumn_wordcloud.txt"
-            Access.Flag.WINTER -> "winter_wordcloud.txt"
-            Access.Flag.NEW_YEAR -> "newyear_wordcloud.txt"
-        }
-        val file = File(fileName)
-        if (!file.exists()) file.createNewFile()
-        file.writeText(text)
+fun runPython(): Boolean {
+    val process = ProcessBuilder("python", "wc.py").run {
+        // pythonのプログラムは相対パスでファイルを指定しているので、カレントディレクトリを移動する必要がある
+        directory(File("python"))
+        start()
     }
-    access.closeConnection()
-}
 
-fun runPython(pythonPath: String): Boolean {
-    println(pythonPath)
-    val process = ProcessBuilder(pythonPath, "python/wc.py").start()
+    // WindowsではShift-JISにしないとWordCloudが上手く動いてくれない
+    OutputStreamWriter(process.outputStream, "Shift-JIS").buffered().use { bw ->
+        val access = Access()
+        val sb = StringBuilder()
+        Access.Flag.values().forEach {
+            val data = access.loadWordAndCounts(it, 100)
+            val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
+            sb.append(text, ":*:")
+        }
+        access.closeConnection()
+        bw.write(sb.toString())
+    }
+
+    process.inputStream.reader().use { print("Python : ${it.readText()}") }
+    process.errorStream.reader().use { print(it.readText()) }
     return process.waitFor() == 0
 }
