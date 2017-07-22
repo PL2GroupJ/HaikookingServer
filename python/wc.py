@@ -50,7 +50,7 @@ if __name__ == '__main__':
                           mask=winter_mask, width=1000, height=1000, colormap="PuBuGn", collocations=None).generate(textList[6])
     wordcloud.to_file("image/winter_wordcloud.png")
 
-    wordcloud = WordCloud(background_color="moccasin", font_path="meiryo.ttc",
+    wordcloud = WordCloud(background_color="royalblue", font_path="meiryo.ttc",
                           mask=newyear_mask, width=1000, height=1000, colormap="Reds", collocations=None).generate(textList[7])
     wordcloud.to_file("image/newyear_wordcloud.png")
 
