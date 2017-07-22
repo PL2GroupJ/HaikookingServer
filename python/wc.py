@@ -23,35 +23,35 @@ if __name__ == '__main__':
     textList = input().split(":*:")
 
     wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="meiryo.ttc",
-                          mask=logo_mask, width=1000, height=1000, colormap="gist_rainbow").generate(textList[0])
+                          mask=logo_mask, width=1000, height=1000, colormap="gist_rainbow", collocations=None).generate(textList[0])
     wordcloud.to_file("image/total_wordcloud.png")
 
     wordcloud = WordCloud(background_color="lightcyan", mode="RGB", font_path="meiryo.ttc",
-                          mask=weekly_mask, width=1000, height=1000, colormap="gist_rainbow").generate(textList[1])
+                          mask=weekly_mask, width=1000, height=1000, colormap="gist_rainbow", collocations=None).generate(textList[1])
     wordcloud.to_file("image/weekly_wordcloud.png")
 
     wordcloud = WordCloud(background_color="midnightblue", mode="RGB", font_path="meiryo.ttc",
-                          mask=monthly_mask, width=1000, height=1000, colormap="Wistia").generate(textList[2])
+                          mask=monthly_mask, width=1000, height=1000, colormap="Wistia", collocations=None).generate(textList[2])
     wordcloud.to_file("image/monthly_wordcloud.png")
 
     wordcloud = WordCloud(background_color="palegreen", font_path="meiryo.ttc",
-                          mask=spring_mask, width=1000, height=1000, colormap="spring").generate(textList[3])
+                          mask=spring_mask, width=1000, height=1000, colormap="spring", collocations=None).generate(textList[3])
     wordcloud.to_file("image/spring_wordcloud.png")
 
     wordcloud = WordCloud(background_color="paleturquoise", font_path="meiryo.ttc",
-                          mask=summer_mask, width=1000, height=1000, colormap="summer").generate(textList[4])
+                          mask=summer_mask, width=1000, height=1000, colormap="summer", collocations=None).generate(textList[4])
     wordcloud.to_file("image/summer_wordcloud.png")
 
     wordcloud = WordCloud(background_color="darkslategray", font_path="meiryo.ttc",
-                          mask=autumn_mask, width=1000, height=1000, colormap="autumn").generate(textList[5])
+                          mask=autumn_mask, width=1000, height=1000, colormap="autumn", collocations=None).generate(textList[5])
     wordcloud.to_file("image/autumn_wordcloud.png")
 
     wordcloud = WordCloud(background_color="midnightblue", font_path="meiryo.ttc",
-                          mask=winter_mask, width=1000, height=1000, colormap="PuBuGn").generate(textList[6])
+                          mask=winter_mask, width=1000, height=1000, colormap="PuBuGn", collocations=None).generate(textList[6])
     wordcloud.to_file("image/winter_wordcloud.png")
 
     wordcloud = WordCloud(background_color="moccasin", font_path="meiryo.ttc",
-                          mask=newyear_mask, width=1000, height=1000, colormap="Reds").generate(textList[7])
+                          mask=newyear_mask, width=1000, height=1000, colormap="Reds", collocations=None).generate(textList[7])
     wordcloud.to_file("image/newyear_wordcloud.png")
 
     print("wordcloud was generated.")
