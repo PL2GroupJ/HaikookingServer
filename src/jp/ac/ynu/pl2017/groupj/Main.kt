@@ -116,7 +116,8 @@ fun main(args: Array<String>) {
 
     // ローカル関数で再帰をする。一日経つごとにに実行
     fun task(dateTime: LocalDateTime = LocalDateTime.now().plusDays(1)) {
-        runPython()
+        // 引数でPythonのパスを指定できるように
+        if (args.isNotEmpty()) runPython(args[0]) else runPython()
         println("next generation is $dateTime")
         Timer().schedule(timerTask { task() }, dateTime.toDate() )
     }
@@ -132,28 +133,28 @@ fun main(args: Array<String>) {
     }
 }
 
-fun runPython(): Boolean {
+fun runPython(pythonPath: String = "python"): Boolean {
+    // WordCloudのためのデータ取得
+    val access = Access()
+    val sb = StringBuilder()
+    Access.Flag.values().forEach {
+        val data = access.loadWordAndCounts(it, 100)
+        val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
+        sb.append(text, ":*:")
+    }
+    access.closeConnection()
+
+    // WindowsではShift-JISにしないとWordCloudが上手く動いてくれない
     val encoding = if(Platform.isWindows) Charset.forName("Shift-JIS") else StandardCharsets.UTF_8
-    val process = ProcessBuilder("python", "wc.py").run {
+    val process = ProcessBuilder(pythonPath, "wc.py").run {
         // pythonのプログラムは相対パスでファイルを指定しているので、カレントディレクトリを移動する必要がある
         directory(File("python"))
         start()
     }
 
-    // WindowsではShift-JISにしないとWordCloudが上手く動いてくれない
-    OutputStreamWriter(process.outputStream, encoding).buffered().use { bw ->
-        val access = Access()
-        val sb = StringBuilder()
-        Access.Flag.values().forEach {
-            val data = access.loadWordAndCounts(it, 100)
-            val text = data.map { (word, count) -> (1..count).map { word } }.flatten().joinToString(separator = ",")
-            sb.append(text, ":*:")
-        }
-        access.closeConnection()
-        bw.write(sb.toString())
-    }
-
+    OutputStreamWriter(process.outputStream, encoding).buffered().use { it.write(sb.toString()) }
     process.inputStream.reader().use { print("Python : ${it.readText()}") }
     process.errorStream.reader().use { print(it.readText()) }
+
     return process.waitFor() == 0
 }
