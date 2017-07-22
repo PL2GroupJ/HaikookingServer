@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter
 import java.net.ServerSocket
 import java.net.Socket
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -132,6 +133,7 @@ fun main(args: Array<String>) {
 }
 
 fun runPython(): Boolean {
+    val encoding = if(Platform.isWindows) Charset.forName("Shift-JIS") else StandardCharsets.UTF_8
     val process = ProcessBuilder("python", "wc.py").run {
         // pythonのプログラムは相対パスでファイルを指定しているので、カレントディレクトリを移動する必要がある
         directory(File("python"))
@@ -139,7 +141,7 @@ fun runPython(): Boolean {
     }
 
     // WindowsではShift-JISにしないとWordCloudが上手く動いてくれない
-    OutputStreamWriter(process.outputStream, "Shift-JIS").buffered().use { bw ->
+    OutputStreamWriter(process.outputStream, encoding).buffered().use { bw ->
         val access = Access()
         val sb = StringBuilder()
         Access.Flag.values().forEach {
